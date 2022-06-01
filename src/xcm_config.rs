@@ -2,9 +2,9 @@
 
 use codec::{Decode, Encode};
 
-use sp_std::prelude::*;
-use frame_support::RuntimeDebug;
 use cumulus_primitives_core::ParaId;
+use frame_support::RuntimeDebug;
+use sp_std::prelude::*;
 
 #[derive(Encode, Decode, RuntimeDebug)]
 pub enum SystemCall {
@@ -24,7 +24,6 @@ pub enum AutomationTimeCall<T: frame_system::Config> {
     ScheduleCancelTask(T::Hash),
 }
 
-
 #[derive(Encode, Decode, RuntimeDebug)]
 pub enum NeuChainCall<T: frame_system::Config> {
     #[codec(index = 0)]
@@ -42,8 +41,16 @@ pub enum TestChainCall {
 pub struct OakChainCallBuilder;
 
 impl OakChainCallBuilder {
-    pub fn automation_time_schedule_notify<T: frame_system::Config>(provided_id: Vec<u8>, times: Vec<u64>, message: Vec<u8>) -> NeuChainCall<T> {
-        NeuChainCall::AutomationTime(AutomationTimeCall::<T>::ScheduleNotifyTask(provided_id, times, message))
+    pub fn automation_time_schedule_notify<T: frame_system::Config>(
+        provided_id: Vec<u8>,
+        times: Vec<u64>,
+        message: Vec<u8>,
+    ) -> NeuChainCall<T> {
+        NeuChainCall::AutomationTime(AutomationTimeCall::<T>::ScheduleNotifyTask(
+            provided_id,
+            times,
+            message,
+        ))
     }
 
     pub fn automation_time_schedule_xcmp<T: frame_system::Config>(
@@ -63,15 +70,22 @@ impl OakChainCallBuilder {
     }
 
     pub fn automation_time_schedule_native_transfer<T: frame_system::Config>(
-      provided_id: Vec<u8>,
-      execution_times: Vec<u64>,
-      recipient_id: T::AccountId,
-      amount: u128
+        provided_id: Vec<u8>,
+        execution_times: Vec<u64>,
+        recipient_id: T::AccountId,
+        amount: u128,
     ) -> NeuChainCall<T> {
-        NeuChainCall::AutomationTime(AutomationTimeCall::<T>::ScheduleNativeTransferTask(provided_id, execution_times, recipient_id, amount))
+        NeuChainCall::AutomationTime(AutomationTimeCall::<T>::ScheduleNativeTransferTask(
+            provided_id,
+            execution_times,
+            recipient_id,
+            amount,
+        ))
     }
 
-    pub fn automation_time_cancel_task<T: frame_system::Config>(task_id: T::Hash) -> NeuChainCall<T> {
+    pub fn automation_time_cancel_task<T: frame_system::Config>(
+        task_id: T::Hash,
+    ) -> NeuChainCall<T> {
         NeuChainCall::AutomationTime(AutomationTimeCall::<T>::ScheduleCancelTask(task_id))
     }
 }
