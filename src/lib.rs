@@ -12,7 +12,7 @@ use xcm_executor::traits::WeightBounds;
 mod xcm_config;
 
 // NOTE: This is maximum cost in weight to schedule a 24-execution-time automation task on Turing currently
-const MAX_XCM_WEIGHT: u64 = 6_000_000_000;
+pub const MAX_XCM_TRANSACT_WEIGHT: u64 = 6_000_000_000;
 pub const TURING_PARA_ID: u32 = 2114;
 
 pub trait XcmInstructionGenerator<T: frame_system::Config> {
@@ -49,12 +49,12 @@ where
             execution_times,
             para_id,
             returnable_call,
-            MAX_XCM_WEIGHT,
+            MAX_XCM_TRANSACT_WEIGHT,
         );
 
         Transact::<()> {
             origin_type: OriginKind::Native,
-            require_weight_at_most: MAX_XCM_WEIGHT,
+            require_weight_at_most: MAX_XCM_TRANSACT_WEIGHT,
             call: call.encode().into(),
         }
     }
