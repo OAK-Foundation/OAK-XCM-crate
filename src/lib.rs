@@ -11,28 +11,16 @@ use xcm::latest::prelude::*;
 use xcm_executor::traits::WeightBounds;
 mod xcm_config;
 
+const MAX_XCM_WEIGHT: u64 = 6_000_000_000;
+pub const TURING_PARA_ID: u32 = 2114;
+
 pub trait XcmInstructionGenerator<T: frame_system::Config> {
-    fn create_schedule_native_transfer_instruction(
-        provided_id: Vec<u8>,
-        execution_times: Vec<u64>,
-        recipient_id: T::AccountId,
-        amount: u128,
-    ) -> xcm::v2::Instruction<()>;
-
-    fn create_schedule_notify_instruction(
-        provided_id: Vec<u8>,
-        execution_times: Vec<u64>,
-        message: Vec<u8>,
-    ) -> xcm::v2::Instruction<()>;
-
     fn create_schedule_xcmp_instruction(
         provided_id: Vec<u8>,
         execution_times: Vec<u64>,
         para_id: ParaId,
         returnable_call: Vec<u8>,
     ) -> xcm::v2::Instruction<()>;
-
-    fn create_cancel_task_instruction(task_id: T::Hash) -> xcm::v2::Instruction<()>;
 
     fn create_xcm_instruction_set(
         asset: MultiAsset,
@@ -49,44 +37,6 @@ where
     A: Convert<T::AccountId, [u8; 32]>,
     W: WeightBounds<<T as frame_system::Config>::Call>,
 {
-    fn create_schedule_native_transfer_instruction(
-        provided_id: Vec<u8>,
-        execution_times: Vec<u64>,
-        recipient_id: T::AccountId,
-        amount: u128,
-    ) -> xcm::v2::Instruction<()> {
-        let call = xcm_config::OakChainCallBuilder::automation_time_schedule_native_transfer::<T>(
-            provided_id,
-            execution_times,
-            recipient_id,
-            amount,
-        );
-
-        Transact::<()> {
-            origin_type: OriginKind::Native,
-            require_weight_at_most: 6_000_000_000,
-            call: call.encode().into(),
-        }
-    }
-
-    fn create_schedule_notify_instruction(
-        provided_id: Vec<u8>,
-        execution_times: Vec<u64>,
-        message: Vec<u8>,
-    ) -> xcm::v2::Instruction<()> {
-        let call = xcm_config::OakChainCallBuilder::automation_time_schedule_notify::<T>(
-            provided_id,
-            execution_times,
-            message,
-        );
-
-        Transact::<()> {
-            origin_type: OriginKind::Native,
-            require_weight_at_most: 6_000_000_000,
-            call: call.encode().into(),
-        }
-    }
-
     fn create_schedule_xcmp_instruction(
         provided_id: Vec<u8>,
         execution_times: Vec<u64>,
@@ -98,22 +48,12 @@ where
             execution_times,
             para_id,
             returnable_call,
-            6_000_000_000,
+            MAX_XCM_WEIGHT,
         );
 
         Transact::<()> {
             origin_type: OriginKind::Native,
-            require_weight_at_most: 6_000_000_000,
-            call: call.encode().into(),
-        }
-    }
-
-    fn create_cancel_task_instruction(task_id: T::Hash) -> xcm::v2::Instruction<()> {
-        let call = xcm_config::OakChainCallBuilder::automation_time_cancel_task::<T>(task_id);
-
-        Transact::<()> {
-            origin_type: OriginKind::Native,
-            require_weight_at_most: 6_000_000_000,
+            require_weight_at_most: MAX_XCM_WEIGHT,
             call: call.encode().into(),
         }
     }
