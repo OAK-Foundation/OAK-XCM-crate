@@ -11,6 +11,7 @@ use xcm::latest::prelude::*;
 use xcm_executor::traits::WeightBounds;
 mod xcm_config;
 
+// NOTE: This is maximum cost in weight to schedule a 24-execution-time automation task on Turing currently
 const MAX_XCM_WEIGHT: u64 = 6_000_000_000;
 pub const TURING_PARA_ID: u32 = 2114;
 
