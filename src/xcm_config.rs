@@ -7,12 +7,6 @@ use frame_support::RuntimeDebug;
 use sp_std::prelude::*;
 
 #[derive(Encode, Decode, RuntimeDebug)]
-pub enum SystemCall {
-    #[codec(index = 8)]
-    RemarkWithEvent(Vec<u8>),
-}
-
-#[derive(Encode, Decode, RuntimeDebug)]
 pub enum AutomationTimeCall {
     #[codec(index = 2)]
     ScheduleXcmpTask(Vec<u8>, Vec<u64>, ParaId, Vec<u8>, u64),
@@ -20,8 +14,6 @@ pub enum AutomationTimeCall {
 
 #[derive(Encode, Decode, RuntimeDebug)]
 pub enum NeuChainCall {
-    #[codec(index = 0)]
-    System(SystemCall),
     #[codec(index = 60)]
     AutomationTime(AutomationTimeCall),
 }
