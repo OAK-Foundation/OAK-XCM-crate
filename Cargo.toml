@@ -1,5 +1,5 @@
 [package]
-name = "oak_xcm"
+name = "oak-xcm"
 version = "0.1.0"
 edition = "2021"
 
