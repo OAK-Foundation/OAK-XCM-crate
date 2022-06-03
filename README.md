@@ -1,1 +1,3 @@
-# OAK-XCM-crate
+# oak-xcm
+
+This crate can be used to connect to Turing through an established HRMP channel in order to make an XCM call to Turing where Turing will schedule a pre-packaged XCM call back to the parachain. It accomplishes this by building the necessary XCM instruction set to make the call to Turing, while setting the correct necessary weights to ensure that the XCM call does not run out of weight. The XCM instruction set to pre-package a call and schedule it on Turing involves withdrawing Turing assets from the originating parachain’s sovereign account, paying the correct fees based on the maximum amount of weight the call can incur, building the pre-packaged call itself and refunding the excess fees.
